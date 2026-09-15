@@ -1,0 +1,117 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+#button_bit {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  border: 1px solid #d4d4d8;
+  border-radius: 1rem;
+
+  background: #18181b;
+  padding: 1rem 1.25rem;
+
+  font-weight: 500;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 0 0 #d4d4d8;
+
+  transition:
+    transform 200ms ease-out,
+    background-color 200ms ease-out,
+    color 200ms ease-out,
+    border-color 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+/* Brillo */
+#button_bit::before {
+  content: '';
+
+  position: absolute;
+  top: 0;
+  left: -75%;
+
+  width: 45%;
+  height: 100%;
+
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.03) 70%,
+    transparent 100%
+  );
+
+  transform: skewX(-20deg);
+
+  transition: left 550ms ease;
+}
+
+/* Hover */
+#button_bit:hover {
+  transform: translateY(-4px);
+
+  border-color: #71717a;
+  background: #27272a;
+  color: #ffffff;
+
+  box-shadow: 0 7px 0 0 #d4d4d8;
+}
+
+#button_bit:hover::before {
+  left: 130%;
+}
+
+/* Click */
+#button_bit:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 0 #d4d4d8;
+}
+
+/* Focus */
+#button_bit:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 2px rgb(161 161 170 / 50%),
+    0 4px 0 0 #d4d4d8;
+}
+
+/* ========================================= */
+/*              MODO OSCURO                  */
+/* ========================================= */
+
+.dark #button_bit {
+  border-color: #3f3f46;
+  background: #18181b;
+  color: #d4d4d8;
+
+  box-shadow: 0 4px 0 0 #27272a;
+}
+
+.dark #button_bit:hover {
+  border-color: #71717a;
+  background: #27272a;
+  color: #ffffff;
+
+  box-shadow: 0 7px 0 0 #27272a;
+}
+
+.dark #button_bit:active {
+  box-shadow: 0 2px 0 0 #27272a;
+}
+
+.dark #button_bit:focus-visible {
+  box-shadow:
+    0 0 0 2px rgb(161 161 170 / 50%),
+    0 4px 0 0 #27272a;
+}
