@@ -4,16 +4,39 @@ function OutsideIDE() {
   const hobbies = ['Cocinar', 'Gym', 'Caminar', 'Leer'];
 
   return (
-    <section className="relative">
+    <section className="relative font-['Manrope']">
       {/* Encabezado */}
-      <div className="mb-14">
-        <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.25em] text-zinc-400">
-          Un poco de mí
-        </span>
+      <div className="mb-5">
+        <div className="mb-6 flex items-center gap-3">
+          <span
+            className="
+              h-px
+              w-8
+              bg-zinc-300
+              transition-colors
+              duration-500
+              dark:bg-zinc-700
+            "
+          />
+
+          <span
+            className="
+              font-['Manrope']
+              text-xs
+              font-semibold
+              uppercase
+              tracking-[0.22em]
+              text-zinc-400
+            "
+          >
+            Un poco sobre mí
+          </span>
+        </div>
 
         <div className="flex items-center gap-4">
           <h4
             className="
+              font-['Space_Grotesk']
               text-3xl
               font-medium
               tracking-tight
@@ -27,20 +50,6 @@ function OutsideIDE() {
             Fuera del IDE
           </h4>
         </div>
-
-        <div
-          className="
-            mt-5
-            h-px
-            w-20
-            bg-gradient-to-r
-            from-zinc-900/30
-            to-transparent
-            transition-all
-            duration-500
-            dark:from-white/30
-          "
-        />
       </div>
 
       <div className="grid items-center gap-16 md:grid-cols-2">
@@ -48,6 +57,7 @@ function OutsideIDE() {
         <div className="max-w-md">
           <p
             className="
+              font-['Manrope']
               text-base
               leading-8
               text-zinc-600
@@ -77,6 +87,7 @@ function OutsideIDE() {
                   bg-white
                   px-4
                   py-2
+                  font-['Manrope']
                   text-sm
                   font-medium
                   text-zinc-600
@@ -117,81 +128,8 @@ function OutsideIDE() {
           </div>
         </div>
 
-        {/* Cartas */}
+        {/* Imágenes */}
         <div className="relative flex justify-center md:justify-end">
-          {/* Decoración superior */}
-          <div
-            className="
-              pointer-events-none
-              absolute
-              -right-5
-              -top-5
-              -z-10
-              h-32
-              w-32
-              rounded-full
-              border
-              border-dashed
-              border-zinc-300
-              opacity-70
-              transition-colors
-              duration-500
-              dark:border-zinc-700
-            "
-          />
-
-          {/* Decoración inferior */}
-          <div
-            className="
-              pointer-events-none
-              absolute
-              -bottom-5
-              -left-5
-              -z-10
-              h-20
-              w-20
-              rounded-full
-              border
-              border-dashed
-              border-zinc-300
-              opacity-70
-              transition-colors
-              duration-500
-              dark:border-zinc-700
-            "
-          />
-
-          {/* Pequeños detalles */}
-          <span
-            className="
-              absolute
-              -right-2
-              top-1/2
-              h-1.5
-              w-1.5
-              rounded-full
-              bg-zinc-300
-              transition-colors
-              duration-500
-              dark:bg-zinc-600
-            "
-          />
-
-          <span
-            className="
-              absolute
-              -left-2
-              top-1/3
-              h-1.5
-              w-1.5
-              rounded-full
-              bg-zinc-300
-              transition-colors
-              duration-500
-              dark:bg-zinc-600
-            "
-          />
-
           <div className="relative">
             <ImageSlider images={['/cock.jpg', '/code.jpg', '/Fron.jpg', '/Gym.jpg']} />
           </div>

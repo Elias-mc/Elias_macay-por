@@ -1,7 +1,23 @@
 @import 'tailwindcss';
-
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  --font-body: 'Manrope', sans-serif;
+  --font-title: 'Space Grotesk', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-title);
+}
 #button_bit {
   position: relative;
   isolation: isolate;
@@ -114,4 +130,24 @@
   box-shadow:
     0 0 0 2px rgb(161 161 170 / 50%),
     0 4px 0 0 #27272a;
+}
+
+@keyframes techRowLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes techRowRight {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }

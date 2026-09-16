@@ -1,29 +1,29 @@
 import { useEffect, useState } from 'react';
 
-import GithubActivity from './components/GithubAcivity';
-import Home_page from './components/home_page';
 import Top_bar from './components/top_bar';
-import Experience from './pages/Experience';
-import OutsideIDE from './pages/OutsideIDE';
+import Home_page from './pages/Home_page';
 
 function App() {
   const [themeChanging, setThemeChanging] = useState(false);
 
   useEffect(() => {
+    let timeout;
+
     const handleThemeChange = () => {
       setThemeChanging(true);
 
-      const timeout = setTimeout(() => {
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
         setThemeChanging(false);
       }, 720);
-
-      return () => clearTimeout(timeout);
     };
 
     window.addEventListener('theme-change', handleThemeChange);
 
     return () => {
       window.removeEventListener('theme-change', handleThemeChange);
+      clearTimeout(timeout);
     };
   }, []);
 
@@ -45,26 +45,11 @@ function App() {
       {/* Barrido vertical del cambio de tema */}
       <div id="theme-transition" className={themeChanging ? 'active' : ''} aria-hidden="true" />
 
-      <div className="mx-auto max-w-5xl px-6 py-6 md:px-10 md:py-8">
+      <div className="mx-auto max-w-4xl  py-6 md:px-10 md:py-8">
         <Top_bar />
 
-        <div className="mt-32 space-y-17">
-          {/* Entrada escalonada */}
-          <div className="page-enter page-delay-1">
-            <Home_page />
-          </div>
-
-          <div className="page-enter page-delay-2">
-            <Experience />
-          </div>
-
-          <div className="page-enter page-delay-3">
-            <GithubActivity />
-          </div>
-
-          <div className="page-enter page-delay-4">
-            <OutsideIDE />
-          </div>
+        <div className="mt-26 space-y-17">
+          <Home_page />
         </div>
       </div>
     </main>
