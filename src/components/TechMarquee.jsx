@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   IconCSS,
   IconElectron,
@@ -77,32 +79,48 @@ function TechMarquee() {
     <section
       id="tecnologias"
       className="
+        relative
+        w-full
+        min-w-0
+        font-['Manrope']
         page-enter
         page-delay-2
-        relative
       "
     >
       {/* Encabezado */}
-      <div className="mb-5 flex items-center gap-3">
+
+      <div
+        className="
+          mb-5
+          flex
+          items-center
+          gap-3
+          tech-label-enter
+        "
+      >
         <span
           className="
             h-px
-            w-8
+            w-6
+            shrink-0
             bg-zinc-300
             transition-colors
             duration-500
             dark:bg-zinc-700
+            sm:w-8
           "
         />
 
         <span
           className="
-            text-[10px]
+            text-[9px]
             font-semibold
             uppercase
-            tracking-[0.24em]
+            tracking-[0.22em]
             text-zinc-400
             dark:text-zinc-500
+            sm:text-[10px]
+            sm:tracking-[0.24em]
           "
         >
           Tecnologías
@@ -110,17 +128,35 @@ function TechMarquee() {
       </div>
 
       {/* Título + acción */}
-      <div className="mb-9 flex items-end justify-between gap-6">
-        <div>
+
+      <div
+        className="
+          mb-7
+          flex
+          flex-col
+          items-start
+          gap-4
+          tech-heading-enter
+          sm:mb-9
+          sm:flex-row
+          sm:items-end
+          sm:justify-between
+          sm:gap-6
+        "
+      >
+        <div className="min-w-0">
           <h4
             className="
-              text-3xl
+              font-['Space_Grotesk']
+              text-2xl
               font-medium
+              leading-tight
               tracking-[-0.03em]
               text-zinc-900
               transition-colors
               duration-500
               dark:text-white
+              sm:text-3xl
               md:text-4xl
             "
           >
@@ -128,8 +164,10 @@ function TechMarquee() {
           </h4>
         </div>
 
-        <a
-          href="#"
+        {/* Ver todos - Desktop */}
+
+        <Link
+          to="/Tools/Tools"
           className="
             group/view
             hidden
@@ -170,11 +208,19 @@ function TechMarquee() {
           </span>
 
           <span>Ver todos</span>
-        </a>
+        </Link>
       </div>
 
       {/* Cintas */}
-      <div className="space-y-3">
+
+      <div
+        className="
+          space-y-2.5
+          overflow-hidden
+          tech-marquee-enter
+          sm:space-y-3
+        "
+      >
         {technologyRows.map((row, rowIndex) => {
           const isRowSelected = selected?.row === rowIndex;
 
@@ -187,8 +233,12 @@ function TechMarquee() {
                 overflow-hidden
                 py-1.5
               "
+              style={{
+                animationDelay: `${450 + rowIndex * 100}ms`,
+              }}
             >
               {/* Máscara izquierda */}
+
               <div
                 className="
                   pointer-events-none
@@ -196,17 +246,19 @@ function TechMarquee() {
                   inset-y-0
                   left-0
                   z-20
-                  w-16
+                  w-10
                   bg-gradient-to-r
                   from-white
                   via-white/95
                   to-transparent
                   dark:from-zinc-950
                   dark:via-zinc-950/95
+                  sm:w-16
                 "
               />
 
               {/* Máscara derecha */}
+
               <div
                 className="
                   pointer-events-none
@@ -214,17 +266,19 @@ function TechMarquee() {
                   inset-y-0
                   right-0
                   z-20
-                  w-16
+                  w-10
                   bg-gradient-to-l
                   from-white
                   via-white/95
                   to-transparent
                   dark:from-zinc-950
                   dark:via-zinc-950/95
+                  sm:w-16
                 "
               />
 
               {/* Track */}
+
               <div className="overflow-hidden">
                 <div
                   style={{
@@ -234,7 +288,7 @@ function TechMarquee() {
                     flex
                     w-max
                     items-center
-                    gap-2.5
+                    gap-2
 
                     ${
                       row.direction === 'right'
@@ -245,6 +299,8 @@ function TechMarquee() {
                     group-hover:[animation-play-state:paused]
 
                     ${isRowSelected ? '[animation-play-state:paused]' : ''}
+
+                    sm:gap-2.5
                   `}
                 >
                   {row.technologies.map((technology, index) => (
@@ -277,10 +333,20 @@ function TechMarquee() {
         })}
       </div>
 
-      {/* Estado */}
-      <div className="mt-6 flex items-center justify-between">
-        <a
-          href="#"
+      {/* Ver todos - Mobile */}
+
+      <div
+        className="
+          mt-5
+          flex
+          items-center
+          justify-between
+          tech-mobile-action-enter
+          sm:mt-6
+        "
+      >
+        <Link
+          to="/Tools/Tools"
           className="
             flex
             items-center
@@ -298,9 +364,12 @@ function TechMarquee() {
             sm:hidden
           "
         >
-          <IconView />
-          Ver todos
-        </a>
+          <span className="flex h-3.5 w-3.5 items-center justify-center">
+            <IconView />
+          </span>
+
+          <span>Ver todos</span>
+        </Link>
       </div>
     </section>
   );
@@ -319,17 +388,17 @@ function TechnologyCard({ technology, rowIndex, selected, onSelect }) {
         group/card
         relative
         flex
-        h-10
-        w-36
+        h-9
+        w-32
         shrink-0
         cursor-pointer
         items-center
-        gap-2.5
+        gap-2
         overflow-hidden
         rounded-4xl
         border
         border-dashed
-        px-4
+        px-3.5
         outline-none
 
         transition-all
@@ -376,6 +445,7 @@ function TechnologyCard({ technology, rowIndex, selected, onSelect }) {
       `}
     >
       {/* Reflejo */}
+
       <span
         className={`
           pointer-events-none
@@ -409,43 +479,50 @@ function TechnologyCard({ technology, rowIndex, selected, onSelect }) {
       />
 
       {/* Icono */}
+
       <span
         className="
           relative
           z-10
           flex
-          h-5
-          w-5
+          h-4
+          w-4
           shrink-0
           items-center
           justify-center
           transition-transform
           duration-300
           group-hover/card:scale-110
+          sm:h-5
+          sm:w-5
         "
       >
         <Icon />
       </span>
 
       {/* Nombre */}
+
       <span
         className="
           relative
           z-10
+          min-w-0
           truncate
-          text-xs
+          text-[11px]
           font-medium
           tracking-[-0.01em]
+          sm:text-xs
         "
       >
         {technology.name}
       </span>
 
       {/* Indicador */}
+
       <span
         className={`
           absolute
-          right-3
+          right-2.5
           h-1
           w-1
           rounded-full

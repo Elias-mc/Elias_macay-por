@@ -1,16 +1,19 @@
-import Footer from '../components/Footer';
 import GithubActivity from '../components/GithubAcivity';
+import Certifications from '../components/Home/Certifications';
+import Footer from '../components/Home/Footer';
+import OutsideIDE from '../components/Home/OutsideIDE';
 import Perfil from '../components/Perfil';
 import TechMarquee from '../components/TechMarquee';
-import OutsideIDE from './OutsideIDE';
 
 function Home_page() {
   return (
     <>
       <Perfil />
-      <OutsideIDE />
-      <GithubActivity />
       <TechMarquee />
+      <Certifications />
+      <GithubActivity />
+      <OutsideIDE />
+
       <Footer />
     </>
   );

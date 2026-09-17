@@ -25,13 +25,13 @@ function GithubActivity() {
   };
 
   return (
-    <section id="github">
+    <section id="github" className="github-activity-enter">
       {/* Encabezado */}
-      <div className="mb-10">
-        <div className="mb-4 flex items-center gap-3">
-          <span className="h-px w-8 bg-zinc-300 transition-colors duration-500 dark:bg-zinc-700" />
+      <div className="mb-8 sm:mb-10">
+        <div className="mb-4 flex items-center gap-3 github-activity-label-enter">
+          <span className="h-px w-6 shrink-0 bg-zinc-300 transition-colors duration-500 dark:bg-zinc-700 sm:w-8" />
 
-          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-zinc-400 sm:text-xs sm:tracking-[0.22em]">
             Código y constancia
           </span>
         </div>
@@ -40,13 +40,16 @@ function GithubActivity() {
           <div>
             <h2
               className="
-                text-3xl
+                github-activity-title-enter
+                text-2xl
                 font-medium
-                tracking-tight
+                leading-tight
+                tracking-[-0.03em]
                 text-zinc-950
                 transition-colors
                 duration-500
                 dark:text-white
+                sm:text-3xl
                 md:text-4xl
               "
             >
@@ -59,20 +62,23 @@ function GithubActivity() {
       {/* Calendario */}
       <div
         className="
+          github-activity-calendar-enter
           relative
           overflow-hidden
           border-y
           border-dashed
           border-zinc-300
-          py-8
+          py-6
           transition-colors
           duration-500
           dark:border-zinc-700
+          sm:py-8
         "
       >
         {/* Detalles */}
         <span
           className="
+            github-detail-enter
             absolute
             left-0
             top-0
@@ -88,6 +94,7 @@ function GithubActivity() {
 
         <span
           className="
+            github-detail-enter
             absolute
             right-0
             top-0
@@ -99,10 +106,12 @@ function GithubActivity() {
             duration-500
             dark:bg-zinc-600
           "
+          style={{ animationDelay: '600ms' }}
         />
 
         <span
           className="
+            github-detail-enter
             absolute
             bottom-0
             left-0
@@ -114,10 +123,12 @@ function GithubActivity() {
             duration-500
             dark:bg-zinc-600
           "
+          style={{ animationDelay: '650ms' }}
         />
 
         <span
           className="
+            github-detail-enter
             absolute
             bottom-0
             right-0
@@ -129,10 +140,11 @@ function GithubActivity() {
             duration-500
             dark:bg-zinc-600
           "
+          style={{ animationDelay: '700ms' }}
         />
 
         {/* Calendario */}
-        <div className="overflow-x-auto pb-2">
+        <div className="github-calendar-content overflow-x-auto pb-2">
           <GitHubCalendar
             username="Elias-mc"
             colorScheme={darkMode ? 'dark' : 'light'}

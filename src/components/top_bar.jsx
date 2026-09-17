@@ -26,8 +26,29 @@ function Top_bar() {
     };
   }, []);
 
-  const toggleTheme = () => {
-    setDarkMode((current) => !current);
+  // Colores del destello: violeta frío para entrar a la noche, ámbar
+  // cálido para volver al día. Mismo lenguaje que ya usan los íconos
+  // de luna/sol, así el gesto se siente parte del mismo diseño.
+  const RIPPLE_COLOR_DARK = 'rgba(129, 140, 248, 0.35)';
+  const RIPPLE_COLOR_LIGHT = 'rgba(251, 191, 36, 0.4)';
+
+  const toggleTheme = (event) => {
+    const next = !darkMode;
+
+    // Se usa el centro del botón (no el punto exacto del click) para que
+    // el origen del destello sea siempre el mismo, ya sea con mouse,
+    // touch o teclado (donde no hay una posición de click real).
+    const rect = event.currentTarget.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    const root = document.documentElement;
+    root.style.setProperty('--theme-ripple-x', `${originX}px`);
+    root.style.setProperty('--theme-ripple-y', `${originY}px`);
+    root.style.setProperty('--theme-ripple-color', next ? RIPPLE_COLOR_DARK : RIPPLE_COLOR_LIGHT);
+
+    window.dispatchEvent(new Event('theme-change'));
+    setDarkMode(next);
   };
 
   return (

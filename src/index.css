@@ -1,23 +1,95 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 :root {
   --font-body: 'Manrope', sans-serif;
   --font-title: 'Space Grotesk', sans-serif;
 }
 
-body {
+/* =========================================================
+   BASE
+========================================================= */
+
+html {
   font-family: var(--font-body);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: #ffffff;
+  color: #18181b;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  background: #000000;
+  color: #ffffff;
 }
 
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
+  margin: 0;
   font-family: var(--font-title);
 }
+
+/* =========================================================
+   SELECCIÓN DE TEXTO
+========================================================= */
+
+::selection {
+  background: #18181b;
+  color: #ffffff;
+}
+
+.dark ::selection {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #27272a;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* =========================================================
+   BUTTON BIT
+========================================================= */
+
 #button_bit {
   position: relative;
   isolation: isolate;
@@ -48,6 +120,7 @@ h4 {
 }
 
 /* Brillo */
+
 #button_bit::before {
   content: '';
 
@@ -73,6 +146,7 @@ h4 {
 }
 
 /* Hover */
+
 #button_bit:hover {
   transform: translateY(-4px);
 
@@ -88,12 +162,14 @@ h4 {
 }
 
 /* Click */
+
 #button_bit:active {
   transform: translateY(3px);
   box-shadow: 0 2px 0 0 #d4d4d8;
 }
 
 /* Focus */
+
 #button_bit:focus-visible {
   outline: none;
 
@@ -102,9 +178,9 @@ h4 {
     0 4px 0 0 #d4d4d8;
 }
 
-/* ========================================= */
-/*              MODO OSCURO                  */
-/* ========================================= */
+/* =========================================================
+   BUTTON BIT — DARK
+========================================================= */
 
 .dark #button_bit {
   border-color: #3f3f46;
@@ -132,6 +208,144 @@ h4 {
     0 4px 0 0 #27272a;
 }
 
+/* =========================================================
+   THEME — ANIMACIÓN AL CAMBIAR DE TEMA (gota de agua)
+========================================================= */
+
+/*
+  Simula una gota cayendo en agua: un pequeño destello en el punto de
+  contacto (Top_bar setea --theme-ripple-x/-y/-color antes de disparar
+  "theme-change") seguido de 3 anillos concéntricos que se expanden y
+  se desvanecen con distinto retraso, como ondas reales.
+
+  Optimización: todo se anima solo con transform (scale) y opacity.
+  El tamaño final, el borde y el box-shadow de cada anillo son fijos
+  (no se animan): el navegador los pinta una sola vez al montarse y
+  después, en cada frame, solo compone la transformación en la GPU.
+  Antes se animaban width/height/border-width, que fuerzan layout y
+  repintado en cada frame — con un elemento de este tamaño, eso es lo
+  que hacía que se sintiera pesado en equipos más modestos.
+*/
+
+@keyframes themeRippleFlash {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+}
+
+@keyframes themeRippleRing {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  6% {
+    opacity: var(--ring-opacity, 0.5);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+#theme-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#theme-transition .theme-ripple-flash,
+#theme-transition .theme-ripple-ring {
+  position: absolute;
+  top: var(--theme-ripple-y, 50%);
+  left: var(--theme-ripple-x, 50%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  will-change: transform, opacity;
+}
+
+#theme-transition .theme-ripple-flash {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.9) 0%,
+    var(--theme-ripple-color, rgba(255, 255, 255, 0.5)) 45%,
+    transparent 75%
+  );
+}
+
+#theme-transition .theme-ripple-ring {
+  /* Tamaño fijo (no se anima): pensado para cubrir cualquier pantalla
+     desde cualquier esquina — la diagonal máxima posible es ~141vmax,
+     así que 170vmax deja margen de sobra. El crecimiento real lo hace
+     el scale(0 → 1) de la animación, no un resize. */
+  width: 170vmax;
+  height: 170vmax;
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: var(--theme-ripple-color, rgba(255, 255, 255, 0.4));
+  box-shadow: 0 0 22px var(--theme-ripple-color, rgba(255, 255, 255, 0.35));
+  filter: blur(1.2px);
+}
+
+/* Cada anillo tiene distinto grosor y techo de opacidad, para que se
+   lean como ondas que van perdiendo energía a medida que se alejan
+   del punto de impacto (igual que en el agua real). */
+
+#theme-transition .theme-ripple-ring-1 {
+  border-width: 15px;
+  --ring-opacity: 0.55;
+}
+
+#theme-transition .theme-ripple-ring-2 {
+  border-width: 10px;
+  --ring-opacity: 0.4;
+}
+
+#theme-transition .theme-ripple-ring-3 {
+  border-width: 6px;
+  --ring-opacity: 0.26;
+}
+
+#theme-transition.active .theme-ripple-flash {
+  animation: themeRippleFlash 280ms ease-out forwards;
+}
+
+#theme-transition.active .theme-ripple-ring-1 {
+  animation: themeRippleRing 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+#theme-transition.active .theme-ripple-ring-2 {
+  animation: themeRippleRing 650ms cubic-bezier(0.16, 1, 0.3, 1) 90ms forwards;
+}
+
+#theme-transition.active .theme-ripple-ring-3 {
+  animation: themeRippleRing 650ms cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards;
+}
+
+/*
+  Mientras dura el efecto (~830ms, ver App.jsx) se bloquean los clicks
+  en toda la página, para que un doble click accidental no dispare dos
+  animaciones pisándose entre sí. Si no te gusta, borrá este bloque.
+*/
+main.theme-changing {
+  pointer-events: none;
+}
+
+/* =========================================================
+   MARQUEE
+========================================================= */
+
 @keyframes techRowLeft {
   from {
     transform: translateX(0);
@@ -150,4 +364,576 @@ h4 {
   to {
     transform: translateX(0);
   }
+}
+
+/* =========================================================
+   TOOLS — ENTRADA
+========================================================= */
+
+@keyframes toolsEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes toolsFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toolsFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   PAGE — ENTRADA GENERAL
+========================================================= */
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageEnterSoft {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.page-enter {
+  opacity: 0;
+  animation: pageEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.page-enter-soft {
+  opacity: 0;
+  animation: pageEnterSoft 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.page-delay-1 {
+  animation-delay: 80ms;
+}
+
+.page-delay-2 {
+  animation-delay: 160ms;
+}
+
+.page-delay-3 {
+  animation-delay: 280ms;
+}
+
+.page-delay-4 {
+  animation-delay: 400ms;
+}
+
+.page-delay-5 {
+  animation-delay: 520ms;
+}
+
+/* =========================================================
+   PROFILE — ENTRADA
+========================================================= */
+
+@keyframes profileImageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes profileSocialsEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes profileMusicEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-image-enter {
+  opacity: 0;
+  animation: profileImageEnter 850ms cubic-bezier(0.22, 1, 0.36, 1) 60ms forwards;
+}
+
+.profile-socials-enter {
+  opacity: 0;
+  animation: profileSocialsEnter 600ms cubic-bezier(0.22, 1, 0.36, 1) 300ms forwards;
+}
+
+.profile-music-enter {
+  opacity: 0;
+  animation: profileMusicEnter 650ms cubic-bezier(0.22, 1, 0.36, 1) 400ms forwards;
+}
+
+/* =========================================================
+   PRESENTATION — ENTRADA
+========================================================= */
+
+@keyframes presentationLabelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes presentationTitleEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes presentationDescriptionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes presentationActionsEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.presentation-label-enter {
+  opacity: 0;
+  animation: presentationLabelEnter 650ms cubic-bezier(0.22, 1, 0.36, 1) 300ms forwards;
+}
+
+.presentation-title-enter {
+  opacity: 0;
+  animation: presentationTitleEnter 800ms cubic-bezier(0.22, 1, 0.36, 1) 380ms forwards;
+}
+
+.presentation-description-enter {
+  opacity: 0;
+  animation: presentationDescriptionEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) 500ms forwards;
+}
+
+.presentation-actions-enter {
+  opacity: 0;
+  animation: presentationActionsEnter 650ms cubic-bezier(0.22, 1, 0.36, 1) 620ms forwards;
+}
+
+/* =========================================================
+   TECH MARQUEE — ENTRADA
+========================================================= */
+
+@keyframes techLabelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes techHeadingEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes techMarqueeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes techMobileActionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tech-label-enter {
+  opacity: 0;
+  animation: techLabelEnter 600ms cubic-bezier(0.22, 1, 0.36, 1) 300ms forwards;
+}
+
+.tech-heading-enter {
+  opacity: 0;
+  animation: techHeadingEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) 380ms forwards;
+}
+
+.tech-marquee-enter {
+  opacity: 0;
+  animation: techMarqueeEnter 800ms cubic-bezier(0.22, 1, 0.36, 1) 470ms forwards;
+}
+
+.tech-mobile-action-enter {
+  opacity: 0;
+  animation: techMobileActionEnter 600ms cubic-bezier(0.22, 1, 0.36, 1) 700ms forwards;
+}
+
+/* =========================================================
+   OUTSIDE IDE — ENTRADA
+========================================================= */
+
+@keyframes outsideIdeEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes outsideIdeLabelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes outsideIdeTitleEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes outsideIdeContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes outsideIdeImageEnter {
+  from {
+    opacity: 0;
+    transform: translateX(18px) scale(0.97);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes hobbyItemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.outside-ide-enter {
+  animation: outsideIdeEnter 500ms ease-out both;
+}
+
+.outside-ide-label-enter {
+  opacity: 0;
+
+  animation: outsideIdeLabelEnter 600ms cubic-bezier(0.22, 1, 0.36, 1) 150ms forwards;
+}
+
+.outside-ide-title-enter {
+  opacity: 0;
+
+  animation: outsideIdeTitleEnter 750ms cubic-bezier(0.22, 1, 0.36, 1) 230ms forwards;
+}
+
+.outside-ide-content-enter {
+  opacity: 0;
+
+  animation: outsideIdeContentEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) 400ms forwards;
+}
+
+/*
+  El contenedor ya no tiene una animación de opacity.
+  Esto permite que cada hobby pueda hacer su propio stagger.
+*/
+
+.outside-ide-hobbies-enter {
+  opacity: 1;
+}
+
+.outside-ide-image-enter {
+  opacity: 0;
+
+  animation: outsideIdeImageEnter 850ms cubic-bezier(0.22, 1, 0.36, 1) 420ms forwards;
+}
+
+.hobby-item {
+  opacity: 0;
+
+  animation: hobbyItemEnter 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* =========================================================
+   ACCESIBILIDAD — REDUCIR MOVIMIENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .page-enter,
+  .page-enter-soft,
+  .profile-image-enter,
+  .profile-socials-enter,
+  .profile-music-enter,
+  .presentation-label-enter,
+  .presentation-title-enter,
+  .presentation-description-enter,
+  .presentation-actions-enter,
+  .tech-label-enter,
+  .tech-heading-enter,
+  .tech-marquee-enter,
+  .tech-mobile-action-enter,
+  .outside-ide-enter,
+  .outside-ide-label-enter,
+  .outside-ide-title-enter,
+  .outside-ide-content-enter,
+  .outside-ide-image-enter,
+  .hobby-item {
+    opacity: 1;
+    animation: none;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes githubActivityEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes githubActivityLabelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes githubActivityTitleEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes githubActivityCalendarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes githubDetailEnter {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes githubCalendarContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.github-activity-enter {
+  animation: githubActivityEnter 500ms ease-out both;
+}
+
+.github-activity-label-enter {
+  opacity: 0;
+
+  animation: githubActivityLabelEnter 600ms cubic-bezier(0.22, 1, 0.36, 1) 180ms forwards;
+}
+
+.github-activity-title-enter {
+  opacity: 0;
+
+  animation: githubActivityTitleEnter 750ms cubic-bezier(0.22, 1, 0.36, 1) 280ms forwards;
+}
+
+.github-activity-calendar-enter {
+  opacity: 0;
+
+  animation: githubActivityCalendarEnter 850ms cubic-bezier(0.22, 1, 0.36, 1) 430ms forwards;
+}
+
+.github-calendar-content {
+  opacity: 0;
+
+  animation: githubCalendarContentEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) 560ms forwards;
+}
+
+.github-detail-enter {
+  opacity: 0;
+
+  animation: githubDetailEnter 450ms cubic-bezier(0.22, 1, 0.36, 1) 520ms forwards;
 }

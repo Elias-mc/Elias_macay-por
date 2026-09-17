@@ -22,7 +22,9 @@ function ImageSlider({ images }) {
 
   useEffect(() => {
     return () => {
-      if (springFrame.current) cancelAnimationFrame(springFrame.current);
+      if (springFrame.current) {
+        cancelAnimationFrame(springFrame.current);
+      }
     };
   }, []);
 
@@ -42,7 +44,10 @@ function ImageSlider({ images }) {
       t: performance.now(),
     };
 
-    velocity.current = { x: 0, y: 0 };
+    velocity.current = {
+      x: 0,
+      y: 0,
+    };
 
     event.currentTarget.setPointerCapture(event.pointerId);
   };
@@ -105,9 +110,14 @@ function ImageSlider({ images }) {
         Math.abs(velY) < REST_VELOCITY;
 
       if (atRest) {
-        setPosition({ x: 0, y: 0 });
+        setPosition({
+          x: 0,
+          y: 0,
+        });
+
         setIsReturning(false);
         springFrame.current = null;
+
         return;
       }
 
@@ -165,7 +175,17 @@ function ImageSlider({ images }) {
 
   return (
     <div
-      className="relative mx-auto h-[250px] w-[250px] touch-none"
+      className="
+        relative
+        mx-auto
+        h-[220px]
+        w-[220px]
+        touch-none
+        sm:h-[235px]
+        sm:w-[235px]
+        md:h-[240px]
+        md:w-[240px]
+      "
       style={{
         perspective: '1000px',
       }}

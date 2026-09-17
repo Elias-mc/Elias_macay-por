@@ -7,7 +7,7 @@ const PLAYLIST = [
     src: '/music/Glimpse of Us_spotdown.org.mp3',
   },
   {
-    title: 'Golden Hour ',
+    title: 'Golden Hour',
     artist: 'JVKE',
     src: '/music/golden hour_spotdown.org.mp3',
   },
@@ -91,7 +91,6 @@ function MusicPlayer() {
     });
   };
 
-
   const nextTrack = () => {
     setCurrentTrack((prev) => {
       if (prev >= PLAYLIST.length - 1) {
@@ -104,23 +103,17 @@ function MusicPlayer() {
 
   return (
     <>
-      {/* AUDIO LOCAL */}
       <audio ref={audioRef} preload="metadata" />
 
-      {/* NOW PLAYING */}
       <div
         className="
           mt-5
           flex
-          w-full
-          max-w-full
+          w-60
           min-w-0
-          flex-wrap
           items-center
-          justify-center
-          gap-2.5
-          sm:justify-start
-          sm:gap-3
+          gap-3
+          sm:max-w-md
         "
       >
         {/* CONTROLES */}
@@ -129,19 +122,15 @@ function MusicPlayer() {
             flex
             shrink-0
             items-center
-            justify-center
-            gap-1
-            rounded-4xl
+            gap-0.5
+            rounded-full
             border
             border-dashed
             border-zinc-300
-            px-2
+            px-1.5
             py-1
             transition-colors
             duration-500
-            sm:gap-2
-            sm:px-3
-            sm:py-1.5
             dark:border-zinc-700
           "
         >
@@ -154,13 +143,13 @@ function MusicPlayer() {
               flex
               h-7
               w-7
-              shrink-0
               items-center
               justify-center
+              rounded-full
               text-zinc-400
               transition-all
               duration-200
-              hover:-translate-x-1
+              hover:-translate-x-0.5
               hover:text-zinc-950
               active:scale-90
               dark:text-zinc-500
@@ -170,7 +159,7 @@ function MusicPlayer() {
           >
             <svg
               viewBox="0 0 10 10"
-              className="h-3 w-3 transition-transform duration-200 group-hover:scale-110"
+              className="h-2.5 w-2.5 transition-transform duration-200 group-hover:scale-110"
               aria-hidden="true"
             >
               <rect x="1" y="1" width="1.3" height="8" fill="currentColor" />
@@ -184,31 +173,55 @@ function MusicPlayer() {
             onClick={togglePlay}
             className="
               group
+              relative
               flex
               h-8
               w-8
-              shrink-0
               items-center
               justify-center
               rounded-full
               border
               border-zinc-300
+              bg-zinc-50
               text-zinc-950
               transition-all
               duration-300
-              hover:scale-110
+              hover:scale-105
               hover:border-zinc-950
               active:scale-90
               dark:border-zinc-700
+              dark:bg-zinc-900
               dark:text-white
               dark:hover:border-white
             "
             aria-label={isPlaying ? 'Pause' : 'Play'}
             aria-pressed={isPlaying}
           >
+            {isPlaying && (
+              <span
+                className="
+                  absolute
+                  inset-[-4px]
+                  rounded-full
+                  border
+                  border-dashed
+                  border-zinc-300
+                  animate-[spin_5s_linear_infinite]
+                  dark:border-zinc-700
+                "
+              />
+            )}
+
             <svg
               viewBox="0 0 10 10"
-              className="h-3 w-3 transition-transform duration-300 group-hover:scale-110"
+              className="
+                relative
+                h-3
+                w-3
+                transition-transform
+                duration-300
+                group-hover:scale-110
+              "
               aria-hidden="true"
             >
               {!isPlaying ? (
@@ -228,13 +241,13 @@ function MusicPlayer() {
               flex
               h-7
               w-7
-              shrink-0
               items-center
               justify-center
+              rounded-full
               text-zinc-400
               transition-all
               duration-200
-              hover:translate-x-1
+              hover:translate-x-0.5
               hover:text-zinc-950
               active:scale-90
               dark:text-zinc-500
@@ -244,7 +257,7 @@ function MusicPlayer() {
           >
             <svg
               viewBox="0 0 10 10"
-              className="h-3 w-3 transition-transform duration-200 group-hover:scale-110"
+              className="h-2.5 w-2.5 transition-transform duration-200 group-hover:scale-110"
               aria-hidden="true"
             >
               <polygon points="1,1 1,9 7.7,5" fill="currentColor" />
@@ -254,55 +267,63 @@ function MusicPlayer() {
         </div>
 
         {/* INFORMACIÓN */}
-        <div
-          className="
-            min-w-0
-            max-w-full
-            flex-1
-            text-center
-            sm:text-left
-          "
-        >
-          <b
-            className="
-              block
-              max-w-full
-              truncate
-              font-['Manrope']
-              text-[10px]
-              font-semibold
-              leading-tight
-              tracking-tight
-              text-zinc-950
-              transition-colors
-              duration-500
-              sm:text-[11px]
-              dark:text-white
-            "
-            title={track.title}
-          >
-            {track.title}
-          </b>
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-2">
+            <b
+              className="
+                min-w-0
+                truncate
+                font-['Manrope']
+                text-[10px]
+                font-semibold
+                leading-tight
+                tracking-tight
+                text-zinc-950
+                transition-colors
+                duration-500
+                sm:text-[11px]
+                dark:text-white
+              "
+              title={track.title}
+            >
+              {track.title}
+            </b>
+          </div>
 
-          <span
-            className="
-              mt-0.5
-              block
-              max-w-full
-              truncate
-              font-['Manrope']
-              text-[8px]
-              leading-tight
-              text-zinc-400
-              transition-colors
-              duration-500
-              sm:text-[9px]
-              dark:text-zinc-500
-            "
-            title={track.artist}
-          >
-            {track.artist}
-          </span>
+          <div className="mt-0.5 flex items-center gap-2 pl-3.5">
+            <span
+              className="
+                truncate
+                font-['Manrope']
+                text-[8px]
+                leading-tight
+                text-zinc-400
+                transition-colors
+                duration-500
+                sm:text-[9px]
+                dark:text-zinc-500
+              "
+              title={track.artist}
+            >
+              {track.artist}
+            </span>
+
+            <span className="text-[8px] text-zinc-300 dark:text-zinc-700">/</span>
+
+            <span
+              className="
+                shrink-0
+                font-['Manrope']
+                text-[8px]
+                uppercase
+                tracking-[0.12em]
+                text-zinc-400
+                sm:text-[9px]
+              "
+            >
+              {currentTrack + 1}/{PLAYLIST.length}
+            </span>
+          </div>
         </div>
       </div>
     </>
