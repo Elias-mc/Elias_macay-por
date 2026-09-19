@@ -272,8 +272,9 @@ function Perfil() {
           <div
             className="
               presentation-description-enter
+
               mt-6
-              max-w-2xl
+
               text-[14px]
               leading-7
               text-zinc-600
@@ -287,9 +288,9 @@ function Perfil() {
           >
             <p>
               Me interesa crear aplicaciones, sitios web y sistemas de backend que sean funcionales,
-              claros y agradables de usar. Actualmente estudio en la UNLP mientras desarrollo
-              proyectos personales para seguir aprendiendo y experimentando con nuevas tecnologías.
-              También estoy desarrollando{' '}
+              claros y agradables de usar. Actualmente estudio en la UNLP (UNIVERSIDAD DE LA PLATA)
+              mientras desarrollo proyectos personales para seguir aprendiendo y experimentando con
+              nuevas tecnologías. También estoy desarrollando{' '}
               <span
                 className="
                   font-medium

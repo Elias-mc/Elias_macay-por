@@ -69,7 +69,7 @@ function App() {
       <div className="mx-auto max-w-4xl py-6 md:px-10 md:py-8">
         <Top_bar />
 
-        <div className="mt-26 space-y-17">
+        <div className="mt-26 space-y-20 mx-15">
           <Routes>
             <Route path="/" element={<Home_page />} />
             <Route path="/Tools/Tools" element={<Tools />} />

@@ -87,8 +87,6 @@ function TechMarquee() {
         page-delay-2
       "
     >
-      {/* Encabezado */}
-
       <div
         className="
           mb-5
@@ -164,9 +162,7 @@ function TechMarquee() {
           </h4>
         </div>
 
-        {/* Ver todos - Desktop */}
-
-        <Link
+         <Link
           to="/Tools/Tools"
           className="
             group/view
@@ -332,8 +328,6 @@ function TechMarquee() {
           );
         })}
       </div>
-
-      {/* Ver todos - Mobile */}
 
       <div
         className="
